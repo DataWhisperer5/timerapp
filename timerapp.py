@@ -13,8 +13,11 @@ if 'time_left' not in st.session_state:
 
 # Function to play a sound when the timer ends
 def play_sound():
-    # Replace 'beep-07.wav' with the full path to your local audio file
-    playsound("316839__lalks__alarm-02-long.wav")
+    # Use st.audio for browser playback of audio
+    st.audio("316839__lalks__alarm-02-long.wav", format="audio/wav")
+
+
+
 
 # Function to start or restart the timer
 def start_timer():
