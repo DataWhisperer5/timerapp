@@ -1,6 +1,5 @@
 import streamlit as st
 import time
-from playsound import playsound
 
 st.title("10-Second Timer")
 
@@ -13,11 +12,15 @@ if 'time_left' not in st.session_state:
 
 # Function to play a sound when the timer ends
 def play_sound():
-    # Use st.audio for browser playback of audio
-    st.audio("316839__lalks__alarm-02-long.wav", format="audio/wav")
-
-
-
+    # Inject JavaScript to autoplay the sound
+    sound_file = "316839__lalks__alarm-02-long.wav"
+    sound_html = f"""
+    <audio autoplay>
+        <source src="{sound_file}" type="audio/wav">
+        Your browser does not support the audio element.
+    </audio>
+    """
+    st.markdown(sound_html, unsafe_allow_html=True)
 
 # Function to start or restart the timer
 def start_timer():
@@ -79,3 +82,4 @@ with col2:
             stop_timer()
         else:
             start_timer()
+
