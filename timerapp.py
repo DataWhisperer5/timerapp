@@ -12,15 +12,13 @@ if 'time_left' not in st.session_state:
 
 # Function to play a sound when the timer ends
 def play_sound():
-    # Inject JavaScript to autoplay the sound
     sound_file = "316839__lalks__alarm-02-long.wav"
-    sound_html = f"""
-    <audio autoplay>
-        <source src="{sound_file}" type="audio/wav">
-        Your browser does not support the audio element.
-    </audio>
-    """
-    st.markdown(sound_html, unsafe_allow_html=True)
+    st.components.v1.html(f"""
+    <script>
+        var audio = new Audio("{sound_file}");
+        audio.play();
+    </script>
+    """, height=0)
 
 # Function to start or restart the timer
 def start_timer():
@@ -82,4 +80,3 @@ with col2:
             stop_timer()
         else:
             start_timer()
-
