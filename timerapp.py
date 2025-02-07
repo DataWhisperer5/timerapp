@@ -9,25 +9,24 @@ if 'time_left' not in st.session_state:
     st.session_state.running = False
     st.session_state.last_click_time = 0
     st.session_state.paused = False
+    st.session_state.play_sound = False  # Trigger for audio playback
 
 # Function to play a sound when the timer ends
 def play_sound():
-    sound_file = "316839__lalks__alarm-02-long.wav"
-    st.components.v1.html(f"""
-    <script>
-        var audio = new Audio("{sound_file}");
-        audio.play();
-    </script>
-    """, height=0)
+    st.session_state.play_sound = True  # Set the flag to play audio
 
 # Function to start or restart the timer
 def start_timer():
     st.session_state.running = True
     st.session_state.paused = False
+    st.session_state.play_sound = False  # Reset sound trigger
     while st.session_state.running and st.session_state.time_left > 0:
         time.sleep(1)
         st.session_state.time_left -= 1
-        placeholder.markdown(f"<h1 style='text-align: center; font-size: 72px;'>{st.session_state.time_left} seconds left</h1>", unsafe_allow_html=True)
+        placeholder.markdown(
+            f"<h1 style='text-align: center; font-size: 72px;'>{st.session_state.time_left} seconds left</h1>",
+            unsafe_allow_html=True
+        )
         if not st.session_state.running:
             break
     if st.session_state.time_left == 0:
@@ -44,7 +43,10 @@ def reset_timer():
     start_timer()
 
 placeholder = st.empty()
-placeholder.markdown(f"<h1 style='text-align: center; font-size: 72px;'>{st.session_state.time_left} seconds left</h1>", unsafe_allow_html=True)
+placeholder.markdown(
+    f"<h1 style='text-align: center; font-size: 72px;'>{st.session_state.time_left} seconds left</h1>",
+    unsafe_allow_html=True
+)
 
 # Style for circular buttons
 st.markdown("""
@@ -80,3 +82,8 @@ with col2:
             stop_timer()
         else:
             start_timer()
+
+# Play sound if the trigger is set
+if st.session_state.play_sound:
+    st.audio("316839__lalks__alarm-02-long.wav", format="audio/wav")
+    st.session_state.play_sound = False  # Reset the trigger
